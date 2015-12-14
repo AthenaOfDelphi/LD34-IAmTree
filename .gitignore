@@ -1,0 +1,29 @@
+# Ignored filetypes
+
+########################################################
+# Delphi
+########################################################
+
+# IDE files
+*.dproj.local
+*.groupproj.local
+*.identcache
+*.dsk
+
+# Compiled source
+*.dcu
+*.obj
+
+# Backup files
+*.~*
+
+########################################################
+# Common
+########################################################
+
+# Executeables - Windows
+*.exe
+
+# Libraries
+*.dll
+*.so

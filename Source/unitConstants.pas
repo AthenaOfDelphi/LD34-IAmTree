@@ -1,0 +1,342 @@
+unit unitConstants;
+
+interface
+
+uses
+  zgl_math_2d,
+  zgl_sound;
+
+const
+  //------------------------------------------------------------------------------
+  // Precalcd maths constants
+
+  TWOPI = PI*2;
+  ONEDEG = PI/180;
+
+  //------------------------------------------------------------------------------
+  // Layers
+
+  LAYER_TREE_LEAVES = 1;
+  LAYER_TREE_TRUNK = 2;
+  LAYER_TREE_APPLES = 3;
+  LAYER_FLYINGCRITTERS = 10;
+  LAYER_ROOTCRITTERS = 9;
+
+  //------------------------------------------------------------------------------
+  // Graphics settings
+
+  SCREEN_HEIGHT = 600;
+  SCREEN_WIDTH = 800;
+
+  SPRITE_SIZE = 64;
+  HALF_SPRITE_SIZE = SPRITE_SIZE div 2;
+
+  SPRITE_SIZE_TREEPARTS = 16;
+  SPRITE_SIZE_ROOTCRITTERS = 32;
+  SPRITE_SIZE_CURSOR = 64;
+  HALF_SPRITE_SIZE_CURSOR = SPRITE_SIZE_CURSOR div 2;
+
+  SPRITE_SIZE_RESOURCES = 32;
+
+  //------------------------------------------------------------------------------
+  // Flying critter settings
+
+  RANGE_FLYINGCRITTER_MINIMUM = -SPRITE_SIZE;
+  RANGE_FLYINGCRITTER_MAXIMUM = SCREEN_WIDTH+SPRITE_SIZE;
+
+  //------------------------------------------------------------------------------
+  // Wasp settings
+
+  WASP_FIRSTFRAME_LEFTTORIGHT = 9;
+  WASP_LASTFRAME_LEFTTORIGHT = 14;
+
+  WASP_FIRSTFRAME_RIGHTTOLEFT = 1;
+  WASP_LASTFRAME_RIGHTTOLEFT = 6;
+
+  WASP_FRAMERATE = 0.2;
+  WASP_FRAMERATE_VARIANCE = 0.5;
+
+  WASP_WAVETIME_STEPVARIANCE = ONEDEG*2;
+  WASP_WAVETIME_STEP = ONEDEG*2;
+
+  WASP_SPEED_VARIANCE = 0.5;
+
+  WASP_WAVESIZE = 48;
+
+  WASP_STATE_FLYING = 0;
+  WASP_STATE_SCORED = 1;
+
+  //------------------------------------------------------------------------------
+
+  BEE_FIRSTFRAME_LEFTTORIGHT = 25;
+  BEE_LASTFRAME_LEFTTORIGHT = 30;
+
+  BEE_FIRSTFRAME_RIGHTTOLEFT = 17;
+  BEE_LASTFRAME_RIGHTTOLEFT = 21;
+
+  BEE_FRAMERATE = 0.15;
+  BEE_FRAMERATE_VARIANCE = 0.25;
+
+  BEE_WAVETIME_STEPVARIANCE = ONEDEG*2;
+  BEE_WAVETIME_STEP = ONEDEG;
+
+  BEE_SPEED_VARIANCE = 0.3;
+
+  BEE_WAVESIZE = 48;
+
+  BEE_EMITTER_OFFSETY = 16;
+  BEE_EMITTER_OFFSETX_LEFTTORIGHT = 48;
+  BEE_EMITTER_OFFSETX_RIGHTTOLEFT = 16;
+
+  //------------------------------------------------------------------------------
+
+  SCORE_POLINATION = 5;
+  SCORE_APPLE = 10;
+
+  //------------------------------------------------------------------------------
+
+  FLYINGCRITTER_SPAWN_CHANCE = 10; // Out of 1000 - Every frame
+  FLYINGCRITTER_BEECHANCE_IN_SUMMER = 50; // Out of 100
+
+  //------------------------------------------------------------------------------
+  // Game state values
+
+  GAME_STATE_NONE = 0;
+  GAME_STATE_INTRO = 1;
+  GAME_STATE_MAINMENU = 2;
+  GAME_STATE_INGAME = 3;
+  GAME_STATE_GAMEOVER = 4;
+  GAME_STATE_GAMEOVER_END = 5;
+
+  GAME_STATE_INITIAL = GAME_STATE_INTRO;
+
+  //------------------------------------------------------------------------------
+  // Score values
+
+  SCORE_WASP_NOAPPLE = 100;
+  SCORE_BEE_POLLINATE = 500;
+
+  //------------------------------------------------------------------------------
+  // Sound configuration options
+
+  FLYING_CRITTER_VOLUME_STEP = 1/SPRITE_SIZE;
+
+
+  //------------------------------------------------------------------------------
+  // Tree config
+
+  TREE_SEGMENT_SAPLING = 1;
+  TREE_SEGMENT_TRUNK = 2;
+  TREE_SEGMENT_TOP = 3;
+  TREE_SEGMENT_RIGHTY = 4;
+  TREE_SEGMENT_LEFTY = 5;
+  TREE_SEGMENT_INBETWEENY = 6;
+
+  TREE_SPRITES_WOOD = 0;
+  TREE_SPRITES_LEAVES = 1;
+  TREE_SPRITES_APPLES = 2;
+
+  TREE_STATE_DEAD = 0;
+  TREE_STATE_BAD = 1;
+  TREE_STATE_OK = 2;
+  TREE_STATE_GOOD = 3;
+
+  TREE_MAX_LEVEL = 6;
+
+  TREE_BASE = 400;
+
+  MAX_APPLES_PER_SEGMENT = 2;
+
+  APPLES_PER_SEGMENT : array[TREE_SEGMENT_SAPLING..TREE_SEGMENT_INBETWEENY] of integer = (1,0,2,1,1,2);
+
+  (*
+  APPLE_POSITIONS : array[TREE_SEGMENT_SAPLING..TREE_SEGMENT_INBETWEENY,1..MAX_APPLES_PER_SEGMENT] of zglTPoint2d = (
+    ( (x:45;y:23;), (x:0;y:0) ),
+    ( (x:0;y:0;), (x:0;y:0) ),
+    ( (x:16;y:46;), (x:47;y:43) ),
+    ( (x:54;y:26;), (x:0;y:0) ),
+    ( (x:12;y:25;), (x:0;y:0) ),
+    ( (x:140;y:16;), (x:53;y:38) )
+  );
+  *)
+  APPLE_POSITIONS : array[TREE_SEGMENT_SAPLING..TREE_SEGMENT_INBETWEENY,1..MAX_APPLES_PER_SEGMENT] of zglTPoint2d = (
+    ( (x:37;y:15;), (x:0;y:0) ),
+    ( (x:0;y:0;), (x:0;y:0) ),
+    ( (x:8;y:38;), (x:39;y:35) ),
+    ( (x:46;y:18;), (x:0;y:0) ),
+    ( (x:4;y:17;), (x:0;y:0) ),
+    ( (x:6;y:8;), (x:45;y:30) )
+  );
+
+  TREE_WOOD_SPRITES : array[TREE_SEGMENT_SAPLING..TREE_SEGMENT_INBETWEENY] of integer = (
+    1, 2, 3, 4, 5, 6
+  );
+
+  TREE_LEAVES_SPRITES : array[TREE_SEGMENT_SAPLING..TREE_SEGMENT_INBETWEENY,TREE_STATE_DEAD..TREE_STATE_GOOD] of integer = (
+    // Sapling
+    ( 33, 25, 17, 9 ),
+    // Trunk
+    ( 0, 0, 0, 0 ),
+    // Top
+    ( 34, 26, 18, 10 ),
+    // Righty
+    ( 35, 27, 19, 11 ),
+    // Lefty
+    ( 36, 28, 20, 12 ),
+    // Inbetweeny
+    ( 37, 29, 21, 13 )
+  );
+
+  TREE_RESOURCE_PROCESSING_FRAMES = 60;
+  TREE_RESOURCE_FOODPERITEM = 1;
+  TREE_RESOURCE_WATERPERITEM = 2;
+
+  RESOURCE_FRAME_FOOD = 25;
+  RESOURCE_FRAME_WATER = 26;
+  RESOURCE_ADD_FRAME_CHANCE = 10; // Out of 1000 (Checked every frame)
+
+  MAX_RESOURCES = 10;
+
+  SPRINGTIME_ADD_FLOWER_CHANCE = 100; // Out of 1000 (Checked every resource cycle - approx. every second)
+  SEASON_LENGTH = 120*TREE_RESOURCE_PROCESSING_FRAMES;
+  SEASON_LENGTH_SCALINGFACTOR = 20;
+
+  SEASON_SUMMER_WATERBOOST = 2;
+
+  SEASON_SPRING_FOODBOOST = 2;
+  SEASON_SUMMER_FOODBOOST = 1.5;
+
+  //------------------------------------------------------------------------------
+  // Apple config
+
+  APPLE_STATE_NONE = 0;
+  APPLE_STATE_GROWING = 1;
+  APPLE_STATE_NORMAL = 2;
+  APPLE_STATE_HIDING = 3;
+  APPLE_STATE_HIDDEN = 4;
+  APPLE_STATE_UNHIDING = 5;
+  APPLE_STATE_EATEN = 6;
+  APPLE_STATE_GONE = 7;
+  APPLE_STATE_SCORED = 8;
+
+  APPLE_FRAMES_GROWING = 60*10;
+  APPLE_FRAMES_HIDING = 60;
+  APPLE_FRAMES_UNHIDING = 15;
+  APPLE_FRAMES_HIDDEN = 60*5; // Hide it for 4 seconds
+  APPLE_FRAMES_SCORED = 60*2;
+  APPLE_FRAMES_EATEN = 60*2;
+
+  APPLE_SIZE_SHRUNK = 4;
+  APPLE_SIZE_NORMAL = SPRITE_SIZE_TREEPARTS;
+
+  APPLE_SIZECHANGE_GROWING = (APPLE_SIZE_NORMAL-APPLE_SIZE_SHRUNK)/APPLE_FRAMES_GROWING;
+  APPLE_SIZECHANGE_HIDING = -(APPLE_SIZE_NORMAL-APPLE_SIZE_SHRUNK)/APPLE_FRAMES_HIDING;
+  APPLE_SIZECHANGE_UNHIDING = (APPLE_SIZE_NORMAL-APPLE_SIZE_SHRUNK)/APPLE_FRAMES_UNHIDING;
+
+  TREE_RESOURCE_PERCENT_BAD = 10;
+  TREE_RESOURCE_PERCENT_OK = 60;
+  TREE_RESOURCE_PERCENT_GOOD = 100;
+
+  //------------------------------------------------------------------------------
+  // Flower config
+
+  FLOWER_STATE_NONE = 0;
+  FLOWER_STATE_GROWING = 1;
+  FLOWER_STATE_SHRIVELLING = 2;
+  FLOWER_STATE_NORMAL = 3;
+  FLOWER_STATE_FLURTING = 4;
+  FLOWER_STATE_FLURTING_CCW = 5;
+  FLOWER_STATE_FLURTING_CW = 6;
+  FLOWER_STATE_POLINATED_GROWING = 7;
+  FLOWER_STATE_POLINATED_SHRINKING = 8;
+  FLOWER_STATE_IDLE = 9;
+  FLOWER_STATE_DEAD = 10;
+
+  FLOWER_FRAMES_GROWING = 60*10;
+  FLOWER_FRAMES_SHRIVELLING = 60*2;
+  FLOWER_FRAMES_FLURTING = 60;
+  FLOWER_FRAMES_FLURTING_CCW = 120;
+  FLOWER_FRAMES_FLURTING_CW = 60;
+  FLOWER_FRAMES_POLINATED_GROWING = 60;
+  FLOWER_FRAMES_POLINATED_SHRINKING = 30;
+
+  FLOWER_SIZE_SHRUNK = 4;
+  FLOWER_SIZE_NORMAL = SPRITE_SIZE_TREEPARTS;
+
+  FLOWER_FLURT_CYCLES = 4;
+
+  FLOWER_FLURTING_SIZE = 64;
+
+  FLOWER_SIZECHANGE_GROWING = (FLOWER_SIZE_NORMAL-FLOWER_SIZE_SHRUNK)/FLOWER_FRAMES_GROWING;
+  FLOWER_SIZECHANGE_POLINATED_GROWING = +(FLOWER_SIZE_NORMAL/FLOWER_FRAMES_POLINATED_GROWING);
+  FLOWER_SIZECHANGE_POLINATED_SHRINKING = -((FLOWER_SIZE_NORMAL*2)-FLOWER_SIZE_SHRUNK)/FLOWER_FRAMES_POLINATED_SHRINKING;
+
+  FLOWER_ANGLECHANGE_FLURTING = 1; // ONEDEG;
+  FLOWER_ANGLECHANGE_POLINATED = 5; // ONEDEG*5;
+
+  //------------------------------------------------------------------------------
+  // Tree part sprite frames
+
+  TREEPART_FRAME_APPLE = 1;
+  TREEPART_FRAME_FLOWER = 2;
+
+  //------------------------------------------------------------------------------
+  // Root critter states
+
+  ROOTCRITTER_STATE_NONE = 0;
+  ROOTCRITTER_STATE_CLIMBINGUP = 1;
+  ROOTCRITTER_STATE_HEADINGLEFTTOTREE = 2;
+  ROOTCRITTER_STATE_HEADINGRIGHTTOTREE = 3;
+  ROOTCRITTER_STATE_CLIMBINGDOWN = 4;
+  ROOTCRITTER_STATE_DYING = 5;
+  ROOTCRITTER_STATE_DEAD = 6;
+
+  ROOTCRITTER_FRAMES_DYING = 240;
+
+  ROOTCRITTER_MOVEMENT_SPEED = 2;
+  ROOTCRITTER_FRAME_RATE = 0.1;
+
+  ROOTCRITTER_FIRSTFRAME_FOODEMPTY = 9;
+  ROOTCRITTER_LASTFRAME_FOODEMPTY = 12;
+
+  ROOTCRITTER_FIRSTFRAME_FOODFULL = 13;
+  ROOTCRITTER_LASTFRAME_FOODFULL = 16;
+
+  ROOTCRITTER_FIRSTFRAME_WATEREMPTY = 17;
+  ROOTCRITTER_LASTFRAME_WATEREMPTY=20;
+
+  ROOTCRITTER_FIRSTFRAME_WATERFULL = 21;
+  ROOTCRITTER_LASTFRAME_WATERFULL = 24;
+
+  ROOTCRITTER_HEADING_UP = 0;
+  ROOTCRITTER_HEADING_LEFT = 270; // 270*ONEDEG;
+  ROOTCRITTER_HEADING_RIGHT = 90; // 90*ONEDEG;
+  ROOTCRITTER_HEADING_DOWN = 180; // 180*ONEDEG;
+
+  ROOTCRITTER_FOOD_FRAME = 25;
+  ROOTCRITTER_WATER_FRAME = 26;
+
+  ROOTCRITTERS_MAX = 6;
+
+  //------------------------------------------------------------------------------
+
+  FOOD_ADD_BASE = 25;
+  FOOD_ADD_RANDOM_MAX = 25;
+  WATER_ADD_BASE = 25;
+  WATER_ADD_RANDOM_MAX = 25;
+
+  FOOD_PER_ITEM = 1;
+  WATER_PER_ITEM = 2;
+  FOOD_PER_TREE = 1;
+  WATER_PER_TREE = 1;
+
+  //------------------------------------------------------------------------------
+
+  SEASON_NONE = 0;
+  SEASON_SPRING = 1;
+  SEASON_SUMMER = 2;
+  SEASON_AUTUMN = 3;
+
+implementation
+
+end.
